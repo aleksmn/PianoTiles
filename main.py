@@ -31,14 +31,14 @@ MORNING_DURATION = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 
 class Tile(pg.sprite.Sprite):
     # загрузка всех картинок для плиток
-    short_tile = pg.image.load("short_tile.png")
+    short_tile = pg.image.load("images/short_tile.png")
     short_tile = pg.transform.scale(short_tile, (SIZE[0] // 4, SIZE[1] // 3.5))
-    short_tile_pressed = pg.image.load("short_tile_pressed.png")
+    short_tile_pressed = pg.image.load("images/short_tile_pressed.png")
     short_tile_pressed = pg.transform.scale(short_tile_pressed, (SIZE[0] // 4, SIZE[1] // 3.5))
 
-    long_tile = pg.image.load("long_tile.png")
+    long_tile = pg.image.load("images/long_tile.png")
     long_tile = pg.transform.scale(long_tile, (SIZE[0] // 4, SIZE[1] // 2.2))
-    long_tile_pressed = pg.image.load("long_tile_pressed.png")
+    long_tile_pressed = pg.image.load("images/long_tile_pressed.png")
     long_tile_pressed = pg.transform.scale(long_tile_pressed, (SIZE[0] // 4, SIZE[1] // 2.2))
 
     def __init__(self, long=False):
@@ -131,6 +131,8 @@ class Song:
         Song.songs.append(self)
 
 
+
+
 screen = pg.display.set_mode(SIZE)
 
 fps = 500
@@ -160,12 +162,13 @@ song1 = Song("В лесу родилась ёлочка", CHRISTMAS_TREE_NOTES, 
 song2 = Song("Во поле береза стояла", BIRCH_NOTES, BIRCH_DURATION, (20, 200, 360, 45), interval=0.7)
 song3 = Song("Утро", MORNING_NOTES, MORNING_DURATION, (20, 300, 360, 45))
 
-background_menu = pg.image.load("menu.png")
+background_menu = pg.image.load("images/menu.png")
 background_menu = pg.transform.scale(background_menu, SIZE)
 
 is_play = False
 mode = "menu"
 
+#  Игровой цикл
 while True:
     for event in pg.event.get():
         if event.type == pg.QUIT:
