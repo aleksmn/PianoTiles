@@ -148,7 +148,7 @@ def play_note():
     if next_note > 0:
         sound.fadeout(1000)
 
-    sound = pg.mixer.Sound("Sounds/" + playing_song.notes[next_note] + ".ogg")
+    sound = pg.mixer.Sound("sounds/" + playing_song.notes[next_note] + ".ogg")
     sound.play()
     next_note += 1
 
