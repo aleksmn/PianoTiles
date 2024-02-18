@@ -6,8 +6,9 @@ pg.init()
 pg.mixer.init()
 
 # константы
-# здесь записан порядок нот и их длительность для каждой песни
 SIZE = (400, 600)
+
+# здесь записан порядок нот и их длительность для каждой песни
 
 CHRISTMAS_TREE_NOTES = ["c4", "a4", "a4", "g4", "a4", "f4", "c4", "c4", "c4", "a4", "a4", "a-4", "g4", "c5",
                         "c5", "d4", "d4", "a-4", "a-4", "a4", "g4", "f4", "c4", "a4", "a4", "g4", "a4", "f4"]
@@ -123,11 +124,12 @@ class Song:
         self.name = name
         self.notes = notes
         self.duration = duration
-        self.color = "red"
+        self.color = "pink"
         self.rect = pg.Rect(rect)
+        
         self.interval = interval
 
-        self.text = f1.render(self.name, True, pg.Color("white"))
+        self.text = f1.render(self.name, True, "black")
         Song.songs.append(self)
 
 
@@ -143,6 +145,7 @@ sound = None  # звук, который сейчас играет
 
 pg.mixer.music.set_volume(0.3)
 
+f1 = pg.font.Font(None, 38)
 
 def play_note():
     global next_note, sound
@@ -155,7 +158,6 @@ def play_note():
     next_note += 1
 
 
-f1 = pg.font.Font(None, 38)
 
 # создание песен
 song1 = Song("В лесу родилась ёлочка", CHRISTMAS_TREE_NOTES, CHRISTMAS_TREE_DURATION, (20, 100, 360, 45))
@@ -187,12 +189,13 @@ while True:
             sound.stop()
 
         mouse_pos = pg.mouse.get_pos()
+        print(mouse_pos)
 
         for song in Song.songs:
             if song.rect.collidepoint(mouse_pos):
                 song.color = "green"
             else:
-                song.color = "red"
+                song.color = "pink"
 
         if pg.mouse.get_pressed()[0]:
             screen_notes = pg.sprite.Group()
@@ -210,7 +213,7 @@ while True:
 
         y = 1
         for song in Song.songs:
-            pg.draw.rect(screen, pg.Color(song.color), song.rect, 3)
+            pg.draw.rect(screen, pg.Color(song.color), song.rect, border_radius=4)
             screen.blit(song.text, (30, 100 * y + 5))
             y += 1
 
@@ -231,7 +234,7 @@ while True:
         for i in range(4):  # отрисовка дорожек
             pg.draw.line(screen, pg.Color("black"), (i * 100, 0), (i * 100, 600))
 
-        pg.draw.line(screen, pg.Color("red"), (0, 500), (400, 500), 5)
+        pg.draw.line(screen, pg.Color("pink"), (0, 500), (400, 500), 5)
 
         screen_notes.draw(screen)
 
@@ -248,7 +251,7 @@ while True:
 
         for note in screen_notes:
             if note.rect.y > 500 and not note.played:
-                text = f1.render("ПРОИГРЫШ", True, pg.Color('red'))
+                text = f1.render("ПРОИГРЫШ", True, pg.Color('pin'))
                 text_rect = text.get_rect(center=(SIZE[0] // 2, SIZE[1] // 2))
                 screen.blit(text, text_rect)
                 is_play = False
