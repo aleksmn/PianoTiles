@@ -244,14 +244,14 @@ while True:
                 if not note.played:
                     break
             else:
-                text = f1.render("ПОБЕДА", True, pg.Color("green"))
+                text = f1.render("ПОБЕДА", True, "green")
                 text_rect = text.get_rect(center=(SIZE[0] // 2, SIZE[1] // 2))
                 screen.blit(text, text_rect)
                 is_play = False
 
         for note in screen_notes:
             if note.rect.y > 500 and not note.played:
-                text = f1.render("ПРОИГРЫШ", True, pg.Color('pin'))
+                text = f1.render("ПРОИГРЫШ", True, pg.Color('red'))
                 text_rect = text.get_rect(center=(SIZE[0] // 2, SIZE[1] // 2))
                 screen.blit(text, text_rect)
                 is_play = False
