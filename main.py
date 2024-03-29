@@ -189,13 +189,12 @@ while True:
             sound.stop()
 
         mouse_pos = pg.mouse.get_pos()
-        print(mouse_pos)
 
         for song in Song.songs:
             if song.rect.collidepoint(mouse_pos):
-                song.color = "green"
+                song.color = "#59D5E0"
             else:
-                song.color = "pink"
+                song.color = "#FF71CD"
 
         if pg.mouse.get_pressed()[0]:
             screen_notes = pg.sprite.Group()
