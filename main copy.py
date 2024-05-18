@@ -31,6 +31,50 @@ MORNING_DURATION = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 
 
 
+# Класс для плиток
+class Tile(pg.sprite.Sprite):
+    # загрузка всех картинок для плиток
+    short_tile = pg.image.load("images/short_tile.png")
+    short_tile = pg.transform.scale(short_tile, (SIZE[0] // 4, SIZE[1] // 3.5))
+    short_tile_pressed = pg.image.load("images/short_tile_pressed.png")
+    short_tile_pressed = pg.transform.scale(short_tile_pressed, (SIZE[0] // 4, SIZE[1] // 3.5))
+
+    long_tile = pg.image.load("images/long_tile.png")
+    long_tile = pg.transform.scale(long_tile, (SIZE[0] // 4, SIZE[1] // 2.2))
+    long_tile_pressed = pg.image.load("images/long_tile_pressed.png")
+    long_tile_pressed = pg.transform.scale(long_tile_pressed, (SIZE[0] // 4, SIZE[1] // 2.2))
+
+
+    def __init__(self, long=False):
+        '''
+        Класс плитки может создавать их двух разных размеров: короткие и длинные.
+        Если нужно создать длинную плитку, параметр long должен иметь значение True. По умолчанию плитки короткие.
+
+        Длинная плитка имеет дополнительную переменную count - это сколько тиков уже прошло до того,
+        как она посчитается сыгранной. Пока это время не прошло, длинную плитку нужно зажимать мышкой.
+        '''
+        super().__init__()
+
+        if long:
+            self.long = True
+            self.image = Tile.long_tile
+            self.count = 0
+        else:
+            self.long = False
+            self.image = Tile.short_tile
+
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, 3) * SIZE[0] // 4  # создаём плитку на случайной дорожке
+        self.rect.y = 50
+
+        # если плитка соприкосается с другими плитками, переставить её на свободную дорожку
+        while pg.sprite.spritecollide(self, screen_notes, False):
+            self.rect.x = random.randint(0, 3) * SIZE[0] // 4
+
+        self.played = False
+
+
+
 class Song:
     songs = []  # здесь будет хранится список всех доступных песен
 
@@ -77,15 +121,15 @@ mode = "menu"
 
 #  Игровой цикл
 while True:
+    # События
     for event in pg.event.get():
         if event.type == pg.QUIT:
             quit()
 
-
-
+    # ОДИН ОТСТУП 
     # Создадим меню для выбора песни
     if mode == "menu":
-
+        is_play = True
 
         # отрисовка фона
         screen.blit(background_menu, (0, 0))
@@ -122,10 +166,28 @@ while True:
                     mode = "play"
                     print(playing_song)
     
+    # ОДИН ОТСТУП 
     # Режим игры
-
     if mode == "play":
-        print("Режим игры")
+        if is_play:  # только если сейчас идёт игра - нет проигрыша или победы
+            if created_notes < len(playing_song.notes):
+                if playing_song.duration[created_notes] == 1:
+                    screen_notes.add(Tile())
+                else:
+                    screen_notes.add(Tile(long=True))
+                timer = time.time()
+                created_notes += 1
+            screen_notes.update()
+        
+        screen.fill("white")
+
+        for i in range(4):  # отрисовка дорожек
+            pg.draw.line(screen, pg.Color("black"), (i * 100, 0), (i * 100, 600))
+
+        pg.draw.line(screen, pg.Color("pink"), (0, 500), (400, 500), 5)
+
+        # Отрисовка нот
+        screen_notes.draw(screen)
 
 
     pg.display.flip()
